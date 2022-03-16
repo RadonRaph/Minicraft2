@@ -31,10 +31,13 @@ void main (void)
 	float depth = texture2D( TexDepth , uv ).r;	
 
 	vec4 sun = vec4(sunPos.xyz, 1);
-	vec4 sunPosView = (sun * p * v);
+	vec4 sunPosView = p*v*sun;
 	sunPosView /= sunPosView.w;
-	float sunPosDist = length(sunPosView.xy - uv);
 
+	float sunPosDist =  pow(clamp( 1-length(sunPosView.xy - uv),0,1), 20)*3;
+
+	if (sunPosView.z < 0)
+		sunPosDist = 0;
 	
 	
 	//Permet de scaler la profondeur
@@ -66,5 +69,7 @@ void main (void)
 
 	
 
-	color_out = vec4(colorFinal.rgb, 1)+pow(sunPosDist,10);
+	color_out = vec4(colorFinal.rgb, 1);
+
+	color_out += vec4(sunPosDist, sunPosDist,0,1);
 }

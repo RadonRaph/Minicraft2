@@ -147,7 +147,7 @@ public :
 		avatar->update(elapsed, move);
 		cam->setPosition(avatar->Position + YVec3f(0.5, 0.5, 3));
 
-		updateLights(DeltaTimeCumul);
+		updateLights(DeltaTimeCumul*5);
 
 	}
 
@@ -159,22 +159,21 @@ public :
 
 
 
+		glPushMatrix();
 		glUseProgram(0);
 		//Rendu des axes
 		glDisable(GL_LIGHTING);
 		//glDisable(GL_CULL_FACE);
 		glBegin(GL_LINES);
 		glColor3d(1, 0, 0);
-		glVertex3d(0, 0, 0);
-		glVertex3d(10000, 0, 0);
-		glColor3d(0, 1, 0);
-		glVertex3d(0, 0, 0);
-		glVertex3d(0, 10000, 0);
-		glColor3d(0, 0, 1);
-		glVertex3d(0, 0, 0);
-		glVertex3d(0, 0, 10000);
-		glEnd();		
+		glVertex3d(avatar->Position.X, avatar->Position.Y, avatar->Position.Z);
+		glVertex3d(SunPosition.X, SunPosition.Y, SunPosition.Z);
+		//glVertex3d(0, 0, 0);
+		//glVertex3d(1000, 0, 0);
+		glEnd();
 		glEnable(GL_LIGHTING);
+
+		glPopMatrix();
 		
 		//
 
@@ -209,6 +208,8 @@ public :
 #pragma endregion
 
 
+		glPushMatrix();
+
 		FBOPostProcess->setAsOutFBO(false);
 
 		glUseProgram(postProcessShader);
@@ -225,6 +226,10 @@ public :
 		Renderer->sendNearFarToShader(postProcessShader);
 		Renderer->sendScreenSizeToShader(postProcessShader);
 		Renderer->drawFullScreenQuad();
+		glPopMatrix();
+
+
+		
 
 	}
 
