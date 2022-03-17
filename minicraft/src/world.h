@@ -19,7 +19,7 @@ public :
 	#ifdef _DEBUG
 	static const int MAT_SIZE = 1; //en nombre de chunks
 	#else
-	static const int MAT_SIZE = 1; //en nombre de chunks
+	static const int MAT_SIZE = 3; //en nombre de chunks
 	#endif // DEBUG
 
 	static const int MAT_HEIGHT = 1; //en nombre de chunks

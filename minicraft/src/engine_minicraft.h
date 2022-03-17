@@ -390,7 +390,7 @@ public :
 	void updateLights(float boostTime = 0) {
 		//On recup la direction du soleil
 		bool nuit = getSunDirFromDayTime(SunDirection, 6.0f * 60.0f, 19.0f * 60.0f, boostTime);
-		SunPosition = Renderer->Camera->Position + SunDirection * 500.0f;
+		SunPosition = SunDirection * 500.0f;
 
 		//Pendant la journée
 		if (!nuit) {
