@@ -46,7 +46,7 @@ void main (void)
 	vec2 directSunDist = sunPosView.xy - uv;
 	float sunPosDist =  pow(clamp( 1-length(directSunDist),0,1), 20)*3;
 
-	if (sunPosView.z < 0 || depth < 0.9)
+	if (sunSign < 0 || depth < 0.9)
 		sunPosDist = 0;
 	
 	vec4 rayColor = vec4(1,0,1,1);
@@ -110,7 +110,7 @@ void main (void)
 		while (distance(pos,sunUV)>0.1 && i < 2000){
 			float d = LinearizeDepth(texture2D(TexDepth, pos).r);
 			if (d>0.9){
-				sunRay+=0.00025;
+				sunRay+=0.00025*(sun.z/1000);
 			}
 
 			vec2 path = normalize(sunUV-pos);

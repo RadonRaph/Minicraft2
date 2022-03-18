@@ -344,7 +344,7 @@ public :
 
 
 	static bool getSunDirFromDayTime(YVec3f& sunDir, float mnLever, float mnCoucher, float boostTime) {
-		bool nuit;
+		bool nuit = false;
 
 		SYSTEMTIME t;
 		GetLocalTime(&t);
@@ -358,7 +358,8 @@ public :
 		fTime += boostTime;
 		while (fTime > 24 * 60)
 			fTime -= 24 * 60;
-
+		fTime /= 100.0;
+		/*
 		//Si c'est la nuit
 		if (fTime < mnLever || fTime > mnCoucher) {
 			nuit = true;
@@ -374,7 +375,7 @@ public :
 			fTime -= mnLever;
 			fTime /= (mnCoucher - mnLever);
 			fTime *= (float)M_PI;
-		}
+		}*/
 
 		//Direction du soleil en fonction de l'heure
 		sunDir.X = cos(fTime);
@@ -382,9 +383,9 @@ public :
 		sunDir.Z = sin(fTime);
 		//sunDir.X = 1;
 		//sunDir.Z = 0.1f;
-		sunDir.normalize();
+		//sunDir.normalize();
 
-		return nuit;
+		return sin(fTime)<0;
 	}
 
 	void updateLights(float boostTime = 0) {
