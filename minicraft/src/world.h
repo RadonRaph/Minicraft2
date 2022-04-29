@@ -217,9 +217,87 @@ public :
 					Chunks[x][y][z]->toVbos();
 				}
 	}
+
+	MAxis getMinCol(YVec3f pos, YVec3f & dir, float width, float height)
+	{
+		int x = (int)(pos.X / MCube::CUBE_SIZE);
+		int y = (int)(pos.Y / MCube::CUBE_SIZE);
+		int z = (int)(pos.Z / MCube::CUBE_SIZE);
+
+		int xNext = (int)((pos.X + width / 2.0f) / MCube::CUBE_SIZE);
+		int yNext = (int)((pos.Y + width / 2.0f) / MCube::CUBE_SIZE);
+		int zNext = (int)((pos.Z + height / 2.0f) / MCube::CUBE_SIZE);
+
+		int xPrev = (int)((pos.X - width / 2.0f) / MCube::CUBE_SIZE);
+		int yPrev = (int)((pos.Y - width / 2.0f) / MCube::CUBE_SIZE);
+		int zPrev = (int)((pos.Z - height / 2.0f) / MCube::CUBE_SIZE);
+
+		if (x < 0)	x = 0;
+		if (y < 0)	y = 0;
+		if (z < 0)	z = 0;
+
+		if (xPrev < 0)	xPrev = 0;
+		if (yPrev < 0)	yPrev = 0;
+		if (zPrev < 0)	zPrev = 0;
+
+		if (xNext < 0)	xNext = 0;
+		if (yNext < 0)	yNext = 0;
+		if (zNext < 0)	zNext = 0;
+
+		if (x >= MAT_SIZE_CUBES)	x = MAT_SIZE_CUBES - 1;
+		if (y >= MAT_SIZE_CUBES)	y = MAT_SIZE_CUBES - 1;
+		if (z >= MAT_HEIGHT_CUBES)	z = MAT_HEIGHT_CUBES - 1;
+
+		if (xPrev >= MAT_SIZE_CUBES)	xPrev = MAT_SIZE_CUBES - 1;
+		if (yPrev >= MAT_SIZE_CUBES)	yPrev = MAT_SIZE_CUBES - 1;
+		if (zPrev >= MAT_HEIGHT_CUBES)	zPrev = MAT_HEIGHT_CUBES - 1;
+
+		if (xNext >= MAT_SIZE_CUBES)	xNext = MAT_SIZE_CUBES - 1;
+		if (yNext >= MAT_SIZE_CUBES)	yNext = MAT_SIZE_CUBES - 1;
+		if (zNext >= MAT_HEIGHT_CUBES)	zNext = MAT_HEIGHT_CUBES - 1;
+
+		//On fait chaque axe
+		MAxis axis = 0x00;
+		float seuil = 0.0000001f;
+		float prodScalMin = 1.0f;
+
+
+		if (getCube(x, y, zPrev)->isSolid()) {
+			dir.Z = max(0, dir.Z);
+		}
+
+		if (getCube(x, y, zNext)->isSolid()) {
+			dir.Z = min(0, dir.Z);
+		}
+
+		if (getCube(x, yPrev, z)->isSolid()) {
+			dir.Y = max(0, dir.Y);
+		}
+
+		if (getCube(x, yNext, z)->isSolid()) {
+			dir.Y = min(0, dir.Y);
+		}
+
+		if (getCube(xPrev, y, z)->isSolid()) {
+			dir.X = max(0, dir.X);
+		}
+
+		if (getCube(xNext, y, z)->isSolid()) {
+			dir.X = min(0, dir.X);
+		}
+
+		//float depassementx2 = (xNext * NYCube::CUBE_SIZE) - (pos.X + width / 2.0f);
+
+		//On verif tout les 4 angles de droite
+		
+
+		return axis;
+	}
+
+
 	
 	//Boites de collisions plus petites que deux cubes
-	MAxis getMinCol(YVec3f pos, YVec3f dir, float width, float height, float & valueColMin, bool oneShot)
+	MAxis oldgetMinCol(YVec3f pos, YVec3f dir, float width, float height, float & valueColMin, bool oneShot)
 	{
 		int x = (int)(pos.X / MCube::CUBE_SIZE);
 		int y = (int)(pos.Y / MCube::CUBE_SIZE);

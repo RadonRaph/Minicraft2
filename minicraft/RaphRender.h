@@ -117,6 +117,7 @@ public:
 	YVec3f A, B, C, D, E, F, G, H;
 
 	BaseCube(YVec3f position,float width, float heigth) {
+
 		A = position + YVec3f(0, width, heigth);
 		B = position + YVec3f(0, width, 0);
 		C = position + YVec3f(width, width, 0);

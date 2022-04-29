@@ -66,8 +66,13 @@ public:
 			elapsed = 1.0f / 60.0f;
 
 		Speed += (gravity + moveDelta * moveSpeed - Speed*drag)*elapsed;
+
+		World->getMinCol(Position, Speed, Width * 2.0, Height * 2.0);
+
+
 		Position = Position + Speed * elapsed;
 
+		/*OLD
 		float colMin;
 		for (int i = 0; i < 6; ++i) {
 			MWorld::MAxis axis = World->getMinCol(Position, Position, Width*2.0, Height*2.0, colMin, false);
@@ -89,7 +94,7 @@ public:
 				Speed.Z = -Speed.Z * bounciness;
 			}
 			
-		}
+		}*/
 		//}
 	}
 
@@ -100,7 +105,7 @@ public:
 		Renderer->updateMatricesFromOgl(); //Calcule toute les matrices à partir des deux matrices OGL
 		Renderer->sendMatricesToShader(ShaderCube); //Envoie les matrices au shader
 
-		avatarVbo->render();
+		//avatarVbo->render();
 	}
 };
 

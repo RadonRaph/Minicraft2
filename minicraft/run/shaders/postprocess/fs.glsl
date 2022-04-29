@@ -110,7 +110,7 @@ void main (void)
 		while (distance(pos,sunUV)>0.1 && i < 2000){
 			float d = LinearizeDepth(texture2D(TexDepth, pos).r);
 			if (d>0.9){
-				sunRay+=0.00025*(sun.z/1000);
+				sunRay+=0.00050*(sun.z/1000);
 			}
 
 			vec2 path = normalize(sunUV-pos);

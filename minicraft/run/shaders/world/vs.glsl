@@ -45,22 +45,24 @@ void main()
 	if(vs_type_in == CUBE_TERRE)
 		color = vec4(0.3,0.2,0.1,1);
 	if (vs_type_in == CUBE_EAU) {
-		color = vec4(0.2, 0.2, 1.0, 0.7);
-		wPos.z += 1 * sin(wPos.x/15 + elapsed);
+		color = vec4(0.2, 0.2, 1.0, 0.85);
+		//wPos.z += 1 * sin(wPos.x/15 + elapsed);
 
+		vec4 _wPos = wPos;
+		vec3 px = vec3(_wPos.x + 0.1f, _wPos.yz);
+		vec3 py = vec3(_wPos.x, _wPos.y + 0.1f, _wPos.z);
 
-		vec3 px = vec3(wPos.x + 0.1f, wPos.yz);
-		vec3 py = vec3(wPos.x, wPos.y + 0.1f, wPos.z);
-
-		float h = sin(wPos.x/10.0+wPos.y/5.0+elapsed)*1;
-		float hx = sin(px.x / 10.0 + wPos.y / 5.0 + elapsed)*1;
-		float hy = sin(py.x / 10.0 + wPos.y / 5.0 + elapsed)*1;
-		wPos.z -= h;
+		float h = sin(_wPos.x/10.0+_wPos.y/5.0+elapsed)*0.75+sin(_wPos.x*2+_wPos.y*3+elapsed)*0.25;
+		float hx = sin(px.x / 10.0 + _wPos.y / 5.0 + elapsed)*1;
+		float hy = sin(py.x / 10.0 + _wPos.y / 5.0 + elapsed)*1;
+		_wPos.z -= h;
 		px.z -= hx;
 		py.z -= hy;
-		vec3 v1 = normalize(px - wPos.xyz);
-		vec3 v2 = normalize(py - wPos.xyz);
-		normal = cross(v1, v2);
+		vec3 v1 = normalize(px - _wPos.xyz);
+		vec3 v2 = normalize(py - _wPos.xyz);
+		normal = cross(v1, v2)*0.2 + normal*0.8;
+
+		wPos.z -= abs(h)*0.3;
 
 		//normal = vs_normal_in+ vec3(1,0,0) * sin(vecIn.x / 10.0 + elapsed * 1);
 		//color = vec4(1, 0, sin(vecIn.x / 10.0 + elapsed * 1), 1);
