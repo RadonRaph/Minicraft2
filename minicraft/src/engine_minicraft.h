@@ -62,9 +62,12 @@ public :
 		Renderer->Camera->setPosition(YVec3f(10, 10, 10));
 		Renderer->Camera->setLookAt(YVec3f());
 
+		SYSTEMTIME t;
+		GetLocalTime(&t);
+
 
 		World = new MWorld();
-		World->init_world(time(nullptr));
+		World->init_world(t.wMilliseconds+t.wSecond);
 
 		avatar = new MAvatar(Renderer->Camera, World);
 

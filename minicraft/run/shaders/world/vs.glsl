@@ -52,17 +52,17 @@ void main()
 		vec3 px = vec3(_wPos.x + 0.1f, _wPos.yz);
 		vec3 py = vec3(_wPos.x, _wPos.y + 0.1f, _wPos.z);
 
-		float h = sin(_wPos.x/20.0*_wPos.y/2.0+elapsed)*1;
-		float hx = sin(px.x / 20.0 * _wPos.y / 2.0 + elapsed)*1;
-		float hy = sin(py.x /20.0 * _wPos.y / 2.0 + elapsed)*1;
+		float h = sin(_wPos.x/20.0+_wPos.y/2.0+elapsed)*1;
+		float hx = sin(px.x / 20.0 + _wPos.y / 2.0 + elapsed)*1;
+		float hy = sin(py.x /20.0 + _wPos.y / 2.0 + elapsed)*1;
 		_wPos.z -= h;
 		px.z -= hx;
 		py.z -= hy;
 		vec3 v1 = normalize(px - _wPos.xyz);
 		vec3 v2 = normalize(py - _wPos.xyz);
-		normal = cross(v1, v2)*0.2 + normal*0.8;
+		normal = cross(v1, v2)*1;
 
-		wPos.z -= abs(h)*1;
+		wPos.z -= abs(h)*0.7;
 
 		//normal = vs_normal_in+ vec3(1,0,0) * sin(vecIn.x / 10.0 + elapsed * 1);
 		//color = vec4(1, 0, sin(vecIn.x / 10.0 + elapsed * 1), 1);

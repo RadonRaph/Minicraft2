@@ -19,7 +19,7 @@ public :
 	#ifdef _DEBUG
 	static const int MAT_SIZE = 1; //en nombre de chunks
 	#else
-	static const int MAT_SIZE = 3; //en nombre de chunks
+	static const int MAT_SIZE = 5; //en nombre de chunks
 	#endif // DEBUG
 
 	static const int MAT_HEIGHT = 1; //en nombre de chunks
@@ -144,6 +144,10 @@ public :
 
 		srand(seed);
 		Perlin.setFreq(0.05f);
+		Perlin.updateVecs();
+		float xOff = seed / (float)pow(seed, 2);
+		float yOff = seed*1.55 / (float)pow(seed, 2);
+
 
 		ShaderCube = YRenderer::getInstance()->createProgram("shaders/cube");
 
@@ -161,16 +165,19 @@ public :
 				for (int z = 0; z < MAT_HEIGHT_CUBES; z++)
 				{
 					Perlin.setFreq(0.01f);
-					float val = Perlin.sample((float)x, (float)y, (float)0);
+					float val = Perlin.sample((float)x+xOff, (float)y+yOff, (float)0);
 					Perlin.setFreq(0.005f);
-					float val2 = Perlin.sample((float)x, (float)y, (float)475.333f);
+					float val2 = Perlin.sample((float)x+xOff, (float)y+yOff, (float)475.333f);
+
+					Perlin.setFreq(0.1);
+					float val3 = Perlin.sample((float)x + xOff, (float)y + yOff, (float)12.243f);
 
 
 					float h = z / (float)MAT_HEIGHT_CUBES;
 
 					MCube* cube = getCube(x, y, z);
 
-					float v = h + ((val+val2*0.2f)-0.5f)*2;
+					float v = h + ((val*0.2+val2*0.4f+val3*0.1)-0.5f)*2;
 
 					cube->setType(MCube::CUBE_HERBE);
 

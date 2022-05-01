@@ -48,6 +48,8 @@ void main()
 	if (type == CUBE_EAU) {
 		//color_out = vec4(sqrt(c.xyz * max(0, dot(toLight, normal)) * 0.97 + 0.03 * vec3(0.8, 0.9, 1)), c.a);
 		c = diffuse*color+specular*skyColor+ambient;
+		float v = (65-wPos.z)/10.0; 
+		c *= (1-v);
 		c.w = clamp(c.w, 0.4, 1.0);
 		//color_out = vec4(1, 0, 0, 1);
 		

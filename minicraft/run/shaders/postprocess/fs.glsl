@@ -130,8 +130,8 @@ void main (void)
 	//	color_out = rayColor;
 	//}
 
-	if (wPos.z <= 64){
-		color_out = mix(color_out, vec4(0,0,1,1), clamp(depth*4,0,1));
+	if (wPos.z <= 63.5){
+		color_out = mix(color_out, vec4(0,0,0.5,1), clamp(depth*6,0,1));
 		//color_out = vec4(0,0,0,1);
 	}
 }
