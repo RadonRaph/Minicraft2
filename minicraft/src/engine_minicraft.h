@@ -30,6 +30,7 @@ public :
 
 
 	bool mouseDown;
+	bool breakCube;
 	YVec3f mousePos_;
 	YVec3f mousePos;
 	std::unordered_map<int, bool> inputsState;
@@ -68,53 +69,6 @@ public :
 		avatar = new MAvatar(Renderer->Camera, World);
 
 		texHatch = YTexManager::getInstance()->loadTexture("textures/hatching.png");
-		/*
-		//Creation du VBO
-		VboCube = new YVbo(3, 36, YVbo::PACK_BY_ELEMENT_TYPE);
-
-		//Définition du contenu du VBO
-		VboCube->setElementDescription(0, YVbo::Element(3)); //Sommet
-		VboCube->setElementDescription(1, YVbo::Element(3)); //Normale
-		VboCube->setElementDescription(2, YVbo::Element(2)); //UV
-
-		//On demande d'allouer la mémoire coté CPU
-		VboCube->createVboCpu();
-
-
-		YVec3f A(0,1,1),
-			B(0,1,0),
-			C(1,1,0),
-			D(1,1,1),
-			E(1,0,0), 
-			F(1,0,1), 
-			G(0,0,0), 
-			H(0,0,1);
-
-		Quad quads[6] = {
-			Quad(A,B,C,D),
-			Quad(D,C,E,F),
-			Quad(A,D,F,H),
-			Quad(F,E,G,H),
-			Quad(H,G,B,A),
-			Quad(G,E,C,B)
-		};
-
-		
-		for (int i = 0; i < 6; i++)
-		{
-			quads[i].SetTriangle(VboCube, i*6);
-		}
-
-
-
-
-		//On envoie le contenu au GPU
-		VboCube->createVboGpu();
-
-		//On relache la mémoire CPU
-		VboCube->deleteVboCpu();
-
-		*/
 
 		SunColor = YColor(0.7f, 0.5f, 0.0f, 1.0f);
 
@@ -146,6 +100,9 @@ public :
 	
 		avatar->update(elapsed, move);
 		cam->setPosition(avatar->Position + YVec3f(0.5, 0.5, 3));
+
+		//if (breakCube)
+			//BreakCube();
 
 		updateLights(DeltaTimeCumul*5);
 
@@ -222,6 +179,10 @@ public :
 		var = glGetUniformLocation(postProcessShader, "sunPos");
 		glUniform3f(var, SunPosition.X, SunPosition.Y, SunPosition.Z);
 
+		YCamera* cam = Renderer->Camera;
+		var = glGetUniformLocation(postProcessShader, "wPos");
+		glUniform3f(var, cam->Position.X, cam->Position.Y, cam->Position.Z);
+
 		Renderer->sendMatricesToShader(postProcessShader);
 		Renderer->sendNearFarToShader(postProcessShader);
 		Renderer->sendScreenSizeToShader(postProcessShader);
@@ -247,10 +208,34 @@ public :
 
 	void mouseClick(int button, int state, int x, int y, bool inUi)
 	{
-		
+		breakCube = false;
 		if (button == 2) {
 			mouseDown = !state;
-			std::cout << state << std::endl;
+			
+		}
+		else if (button == 0) {
+			breakCube = true;
+		}
+	}
+
+
+	void BreakCube() {
+		YCamera* cam = Renderer->Camera;
+		for (int i = 1;  i< 5; i++)
+		{
+			int x = round(cam->Position.X + cam->Direction.X * i*0.25);
+			int y = round(cam->Position.Y + cam->Direction.Y * i*0.25);
+			int z = round(cam->Position.Z + cam->Direction.Z * i*0.25);
+
+			//std::cout << std::to_string(x) << std::to_string(y) << std::to_string(z) << std::endl;
+			/*
+			MCube* cube = World->getCube(x, y, z);
+			cube->setType(MCube::CUBE_BOIS);
+			World->updateCube(x, y, z);
+			if (cube->isSolid() || true) {
+				World->deleteCube(x, y, z);
+			}
+			*/
 		}
 	}
 
@@ -359,31 +344,12 @@ public :
 		while (fTime > 24 * 60)
 			fTime -= 24 * 60;
 		fTime /= 100.0;
-		/*
-		//Si c'est la nuit
-		if (fTime < mnLever || fTime > mnCoucher) {
-			nuit = true;
-			if (fTime < mnLever)
-				fTime += 24 * 60;
-			fTime -= mnCoucher;
-			fTime /= (mnLever + 24 * 60 - mnCoucher);
-			fTime *= (float)M_PI;
-		}
-		else {
-			//c'est le jour
-			nuit = false;
-			fTime -= mnLever;
-			fTime /= (mnCoucher - mnLever);
-			fTime *= (float)M_PI;
-		}*/
 
 		//Direction du soleil en fonction de l'heure
 		sunDir.X = cos(fTime);
 		sunDir.Y = 0.2f;
 		sunDir.Z = sin(fTime);
-		//sunDir.X = 1;
-		//sunDir.Z = 0.1f;
-		//sunDir.normalize();
+
 
 		return sin(fTime)<0;
 	}

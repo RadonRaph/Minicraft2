@@ -8,6 +8,7 @@ uniform float screen_width;
 uniform float screen_height;
 uniform vec2 near_far;
 uniform vec3 sunPos;
+uniform vec3 wPos;
 
 uniform mat4 v;
 uniform mat4 p;
@@ -125,7 +126,12 @@ void main (void)
 	color_out = vec4(colorFinal.rgb, 1);
 
 	color_out += vec4(sunPosDist, sunPosDist,0,1)+sunRay;
-	if (isPointOnLine(vec2(0.5,0.5), sunUV, uv)){
-		color_out = rayColor;
+	//if (isPointOnLine(vec2(0.5,0.5), sunUV, uv)){
+	//	color_out = rayColor;
+	//}
+
+	if (wPos.z <= 64){
+		color_out = mix(color_out, vec4(0,0,1,1), clamp(depth*4,0,1));
+		//color_out = vec4(0,0,0,1);
 	}
 }

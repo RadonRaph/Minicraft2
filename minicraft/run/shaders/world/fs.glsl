@@ -37,7 +37,7 @@ void main()
 	vec3 viewDir = normalize(camPos - wPos.xyz);
 	vec3 halfVec = normalize(toLight + viewDir);
 	float specular = max(0, dot(halfVec, normal));
-	specular = pow(specular, 1000) * 2;
+	specular = pow(specular, 500) * 5;
 
 	vec4 specularColor = vec4(0.8, 0.7, 0.2, 1);
 
@@ -48,6 +48,7 @@ void main()
 	if (type == CUBE_EAU) {
 		//color_out = vec4(sqrt(c.xyz * max(0, dot(toLight, normal)) * 0.97 + 0.03 * vec3(0.8, 0.9, 1)), c.a);
 		c = diffuse*color+specular*skyColor+ambient;
+		c.w = clamp(c.w, 0.4, 1.0);
 		//color_out = vec4(1, 0, 0, 1);
 		
 	}
